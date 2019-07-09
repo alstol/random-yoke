@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://alinstefanola.ru/dist/js/jquery.js"></script>
+    <style>
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: black;
+      }
+      .quote {
+        color: white;
+        position: fixed; /* or absolute */
+        top: 50%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 2em;
+      }
+      .twopart {
+        font-style: italic;
+      }
+      .line-2 {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quote">
+      <div class="line-1"></div>
+      <div class="line-2"></div>
+    </div>
+    <script>
+      //https://sv443.net/jokeapi/category/Programming?blacklistFlags=nsfw,religious,political
+      var getJoke = () => {
+        $.get(
+          "https://sv443.net/jokeapi/category/Programming?blacklistFlags=nsfw,religious,political",
+          res => {
+            console.log(res);
+            if (res.type === "single") {
+              $(".line-1")
+                .removeClass("twopart")
+                .text(res.joke);
+              $(".line-2").text();
+            }
+            if (res.type === "twopart") {
+              $(".line-1")
+                .addClass("twopart")
+                .text(`"${res.setup}"`);
+              $(".line-2").text(res.delivery);
+            }
+          }
+        );
+      };
+      getJoke();
+      $(document).ready(() => {
+        setInterval(() => {
+          getJoke();
+        }, 60000);
+      });
+    </script>
+  </body>
+</html>
